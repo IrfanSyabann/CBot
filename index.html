@@ -221,6 +221,22 @@
         let btn = document.getElementById("btn")
         btn.addEventListener("click", send)
 
+        // Default Question
+        wait_spawn()
+        setTimeout(() => {
+            document.getElementById('remove').remove()
+
+            bubble_chat.innerHTML += `
+            <div class="question">
+                <img src="Images/AI.png" alt="">
+                <p >Selamat Datang Di CBot😀...kalau boleh tau nama kamu siapa ya?</p>
+            </div>
+            `
+        }, 2000)
+
+
+        // Method Area
+
         // Send Button
         function send() {
             if (regex.test(answer.value)) {
@@ -248,15 +264,6 @@
             document.getElementById('remove').scrollIntoView({ behavior: "smooth" })
         }
 
-        // Default Question
-        bubble_chat.innerHTML += `
-            <div class="question">
-                <img src="Images/AI.png" alt="">
-                <p >Selamat Datang Di CBot😀...kalau boleh tau nama kamu siapa ya?</p>
-            </div>
-            `
-
-        // Method Area
         function question_spawn() {
             let question_value = [
                 `Ooo...Salam kenal ya ${answer_value[number]}, aku CBot`,
@@ -264,7 +271,7 @@
                 "Ooo...gitu ya, kalau boleh tau hobi kamu apa ya?",
                 `Kok hobby kita sama, aku juga suka ${answer_value[number]} loh..😂. Jangan jangan kita jodoh😁`,
                 `Oh ya btw udahan dulu ya`,
-                `Makasih udah nemanin aku ya ${answer_value[number]}😊`
+                `Makasih udah nemanin aku ya ${answer_value[0]}😊`
             ]
 
             document.getElementById('remove').remove()
