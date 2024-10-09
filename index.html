@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        * {
+            margin: 0;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(90deg, red 10%, blue);
+        }
+
+        .shelter {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+        }
+
+        .question {
+            display: flex;
+            justify-content: start;
+        }
+
+        .question>img {
+            margin-top: 11px;
+            margin-left: 10px;
+            width: 3rem;
+            height: 3rem;
+            background: white;
+            border-radius: 20px;
+        }
+
+        .question>p {
+            background: #FAEBD7;
+            padding: 10px;
+            margin-top: 10px;
+            margin-left: 10px;
+            max-width: 11rem;
+            border: solid white;
+            border-radius: 20px;
+        }
+
+        .answer {
+            display: flex;
+            justify-content: end;
+            word-break: break-word;
+        }
+
+        .answer>p {
+            background: #FAEBD7;
+            padding: 10px;
+            margin-top: 10px;
+            margin-right: 10px;
+            max-width: 11rem;
+            border: solid white;
+            border-radius: 20px;
+        }
+
+        .answer>img {
+            margin-top: 11px;
+            margin-right: 10px;
+            width: 3rem;
+            height: 3rem;
+            background: white;
+            border-radius: 20px;
+        }
+
+        #remove {
+            display: flex;
+            justify-content: start;
+            word-break: break-word;
+        }
+
+        #remove>img {
+            margin-top: 11px;
+            margin-right: 10px;
+            width: 3rem;
+            height: 3rem;
+            background: white;
+            border-radius: 20px;
+        }
+
+        #remove>div {
+            background: #FAEBD7;
+            padding: 10px;
+            margin-top: 10px;
+            margin-right: 10px;
+            width: 5rem;
+            border: solid white;
+            border-radius: 20px;
+        }
+
+        #animation {
+            word-break: normal;
+            overflow: hidden;
+            animation: text_wait 2s steps(100) infinite;
+        }
+
+        #block {
+            background: rgb(92, 87, 87);
+            background-size: 50px;
+            height: 100vh;
+            width: 100%;
+        }
+
+        #block>nav {
+            background: black;
+            color: white;
+            display: flex;
+            width: 100%;
+            height: 5vh;
+        }
+
+        #block>nav>p {
+            display: flex;
+            align-items: center;
+        }
+
+        #div-1 {
+            background: rgb(92, 87, 87);
+            background-image: url(Images/Logo.png);
+            background-size: cover;
+            background-position: center;
+            height: 90vh;
+            width: 100%;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+        }
+
+        #block_bottom {
+            display: flex;
+            background: whitesmoke;
+            height: 5vh;
+        }
+
+        #block_bottom>input {
+            width: 100%;
+            height: 3.1rem;
+            margin-right: 20px;
+            font-size: 1em;
+        }
+
+        #block_bottom>button {
+            margin-right: 20px;
+            width: 5.2rem;
+            height: 3.3rem;
+        }
+
+        @keyframes text_wait {
+            from {
+                width: 0%;
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        @media (min-width: 375px) and (max-width: 1440px) {
+            #block {
+                width: 100%;
+            }
+
+            #div-1 {
+                height: 90vh;
+            }
+        }
+
+        @media (min-height: 667px) and (max-height: 2560px) {
+            #block_bottom>input {
+                width: 100%;
+                height: auto;
+                margin-right: 20px;
+            }
+
+            #block_bottom>button {
+                margin-right: 20px;
+                width: 5.2rem;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="shelter">
+        <div id="block">
+            <nav>
+                <img style="margin: 8px; background: white; border-radius: 20px;" src="Images/AI.png" alt="">
+                <p><b>CBot</b></p>
+            </nav>
+            <div id="div-1">
+                <div id="img"></div>
+            </div>
+            <div id="block_bottom">
+                <input type="text" placeholder="Masukan Text" id="answer" required>
+                <button id="btn"><span class="fa-solid fa-paper-plane"></span></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let number = 0
+
+        let bubble_chat = document.getElementById("div-1")
+        let answer = document.getElementById("answer")
+        let answer_value = []
+        let regex = /[<>]/
+
+        let btn = document.getElementById("btn")
+        btn.addEventListener("click", send)
+
+        // Send Button
+        function send() {
+            if (regex.test(answer.value)) {
+                bubble_chat.innerHTML += `
+            <div class="question">
+                <img src="Images/AI.png" alt="">
+                <p >Mau Ngapain Eya...🤣</p>
+            </div>
+            `
+                return false
+            }
+
+            answer_value.push(answer.value)
+
+            answer_spawn()
+
+            wait_spawn()
+            setTimeout(() => {
+                question_spawn()
+            }, 2000)
+
+            // Button Disabled
+            btn.disabled = true
+
+            document.getElementById('remove').scrollIntoView({ behavior: "smooth" })
+        }
+
+        // Default Question
+        bubble_chat.innerHTML += `
+            <div class="question">
+                <img src="Images/AI.png" alt="">
+                <p >Selamat Datang Di CBot😀...kalau boleh tau nama kamu siapa ya?</p>
+            </div>
+            `
+
+        // Method Area
+        function question_spawn() {
+            let question_value = [
+                `Ooo...Salam kenal ya ${answer_value[number]}, aku CBot`,
+                "Oh ya...btw sehari hari biasa kamu ngapain aja si?",
+                "Ooo...gitu ya, kalau boleh tau hobi kamu apa ya?",
+                `Kok hobby kita sama, aku juga suka ${answer_value[number]} loh..😂. Jangan jangan kita jodoh😁`,
+                `Oh ya btw udahan dulu ya`,
+                `Makasih udah nemanin aku ya ${answer_value[number]}😊`
+            ]
+
+            document.getElementById('remove').remove()
+
+            bubble_chat.innerHTML += `
+            <div class="question">
+                <img src="Images/AI.png" alt="">
+                <p>${question_value[number]}</p>
+                </div>
+                `
+            number++
+
+            // Button Active
+            btn.disabled = false
+
+            if (number > question_value.length) {
+                while (bubble_chat.hasChildNodes()) {
+                    bubble_chat.removeChild(bubble_chat.firstChild)
+                }
+
+                // Default Question After Restart
+                bubble_chat.innerHTML += `
+                <div class="question">
+                <img src="Images/AI.png" alt="">
+                    <p>Selamat Datang Di CBot😀...kalau boleh tau nama kamu siapa ya?</p>
+                </div>
+                `
+
+                number = 0
+                answer_value.splice(0, answer_value.length)
+                console.log("Restart!!!")
+            }
+        }
+
+        function answer_spawn() {
+            bubble_chat.innerHTML += `
+            <div class="answer">
+                <p>${answer.value}</p>
+                <img src="Images/User.png" alt="">
+            </div>
+            `
+
+            answer.value = ""
+        }
+
+        function wait_spawn() {
+            bubble_chat.innerHTML += `
+            <div id="remove">
+                <img src="Images/AI.png" alt="">
+                <div>
+                    <h1 id="animation">....</h1>
+                    </div>
+            </div>
+            `
+        }
+    </script>
+
+</body>
+
+</html>
